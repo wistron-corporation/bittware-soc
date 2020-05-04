@@ -1,0 +1,22 @@
+{
+    "config": [
+        {
+            "bittwareIndex": 0,
+            "bittwareBusID": 244
+        },
+        {
+            "bittwareIndex": 1,
+            "bittwareBusID": 236
+        }
+    ],
+    "threshold": [
+        {
+            "criticalHigh": 80,
+            "criticalLow": 0,
+            "warningHigh": 70,
+            "warningLow": 5,
+            "maxValue": 127,
+            "minValue": -128
+        }
+    ]
+}
