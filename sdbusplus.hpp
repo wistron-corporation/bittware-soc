@@ -96,7 +96,6 @@ class SDBusPlus
         }
     }
 };
-
-} // namespace util
-} // namespace nvme
-} // namespace phosphor
+}
+}
+}

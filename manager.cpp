@@ -60,8 +60,8 @@ Json parseSensorConfig()
     return data;
 }
 
-/** @brief Obtain the initial configuration value of NVMe  */
-std::vector<phosphor::mpSOC::bittwareSOC::bittwareConfig> getNvmeConfig()
+/** @brief Obtain the initial configuration value of Bittware  */
+std::vector<phosphor::mpSOC::bittwareSOC::bittwareConfig> getBittwareConfig()
 {
     phosphor::mpSOC::bittwareSOC::bittwareConfig bittwareConfig;
     std::vector<phosphor::mpSOC::bittwareSOC::bittwareConfig> bittwareConfigs;
@@ -92,7 +92,7 @@ std::vector<phosphor::mpSOC::bittwareSOC::bittwareConfig> getNvmeConfig()
         }
         else
         {
-            std::cerr << "Invalid NVMe config file, thresholds dosen't exist"
+            std::cerr << "Invalid config file, thresholds dosen't exist"
                       << std::endl;
         }
 
@@ -131,7 +131,7 @@ std::vector<phosphor::mpSOC::bittwareSOC::bittwareConfig> getNvmeConfig()
 void bittwareManager::init()
 {
     // read json file
-    configs = getNvmeConfig();
+    configs = getBittwareConfig();
     for (auto it = configs.begin(); it != configs.end(); it++)
     {
         std::cout << "Initializing Bittware " << (int)it->index << std::endl;
