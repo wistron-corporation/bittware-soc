@@ -103,9 +103,6 @@ std::vector<phosphor::mpSOC::bittwareSOC::bittwareConfig> getNvmeConfig()
                 uint8_t index = instance.value("bittwareIndex", 0);
                 uint8_t busID = instance.value("bittwareBusID", 0);
 
-                /*std::cout << "index = " << (int)index <<std::endl;
-                std::cout << "busID = " << (int)busID <<std::endl;*/
-
                 bittwareConfig.index = index;
                 bittwareConfig.busID = busID;
                 bittwareConfig.criticalHigh = criticalHigh;

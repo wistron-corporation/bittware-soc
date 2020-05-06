@@ -1,15 +1,11 @@
 #include "smbus.hpp"
-
 #include "i2c-dev.h"
 
+#include <xyz/openbmc_project/Sensor/Value/server.hpp>
+#include <xyz/openbmc_project/Sensor/Threshold/Critical/server.hpp>
+#include <xyz/openbmc_project/Sensor/Threshold/Warning/server.hpp>
+
 #define TMP431_SLAVE_ADDR 0x4c
-#define TMP431_LOCAL_HIGH_COMMAND 0x00
-#define TMP431_LOCAL_LOW_COMMAND 0x15
-#define TMP431_LOCAL_HIGH_STEP 10000
-#define TMP431_LOCAL_LOW_STEP 625
-#define TMP431_TEMPERATURE_WARNING_HIGH 55 * 10000
-#define TMP431_TEMPERATURE_CRITICAL_HIGH 60 * 10000
-#define TMP431_TEMPERATURE_SCALE -4
 
 typedef struct
 {
@@ -21,18 +17,33 @@ namespace phosphor
 {
 namespace mpSOC
 {
-class sensor
+using valueIface = sdbusplus::xyz::openbmc_project::Sensor::server::Value;
+using criticalInterface =
+    sdbusplus::xyz::openbmc_project::Sensor::Threshold::server::Critical;
+
+using warningInterface =
+    sdbusplus::xyz::openbmc_project::Sensor::Threshold::server::Warning;
+
+using bittwareIfaces =
+    sdbusplus::server::object::object<valueIface, criticalInterface,
+                                      warningInterface>;
+
+class sensor : public bittwareIfaces
 {
-public:
+  public:
     sensor() = delete;
     sensor(const sensor&) = delete;
     sensor& operator=(const sensor&) = delete;
     sensor(sensor&&) = delete;
     sensor& operator=(sensor&&) = delete;
     virtual ~sensor() = default;
-    sensor(uint8_t busID);
-    bool getTemp(temperature& tmp);
-private:
+    sensor(sdbusplus::bus::bus& bus, std::string path, uint8_t busID);
+    void getTemp();
+    void setSensorThreshold(uint64_t criticalHigh, uint64_t criticalLow,
+                             uint64_t maxValue, uint64_t minValue,
+                             uint64_t warningHigh, uint64_t warningLow);
+    void setSensorValueToDbus(const u_int64_t value);
+  private:
     uint8_t busID;
 };
 }

@@ -11,10 +11,10 @@
     ],
     "threshold": [
         {
-            "criticalHigh": 80,
+            "criticalHigh": 60,
             "criticalLow": 0,
-            "warningHigh": 70,
-            "warningLow": 5,
+            "warningHigh": 55,
+            "warningLow": 0,
             "maxValue": 127,
             "minValue": -128
         }

@@ -11,7 +11,7 @@ namespace mpSOC
 {
 class vpd
 {
-public:
+  public:
     vpd();
     vpd(uint8_t busID, uint8_t eepromAddr);
     vpd(const vpd&) = delete;
@@ -23,7 +23,7 @@ public:
     void verifyChecksum(uint8_t offset);
     void read();
     void parse();
-private:
+  private:
     bool parseField(const uint8_t fieldOffset, uint8_t& nextField);
     unsigned char rawData[I2C_DATA_MAX];
     uint8_t eepromAddr;

@@ -63,12 +63,12 @@ void vpd::read()
     bus.smbusClose(busID);
 }
 
-static inline uint8_t pci_vpd_lrdt_tag(uint8_t lrdt)
+static inline uint8_t caculateLRDT(uint8_t lrdt)
 {
 	return (lrdt & PCI_VPD_LRDT_TIN_MASK);
 }
 
-static inline uint8_t pci_vpd_srdt_tag(uint8_t srdt)
+static inline uint8_t caculateSRDT(uint8_t srdt)
 {
 	return (srdt & PCI_VPD_SRDT_TIN_MASK) >> 3;
 }
@@ -90,7 +90,7 @@ void vpd::verifyChecksum(uint8_t offset)
 
 bool vpd::parseField(const uint8_t fieldOffset, uint8_t& nextField)
 {
-    auto name = pci_vpd_srdt_tag(rawData[fieldOffset]);
+    auto name = caculateSRDT(rawData[fieldOffset]);
     if (name == PCI_VPD_END_TAG)
     {
         std::cout << "Reach end of VPD." << std::endl;
@@ -109,7 +109,7 @@ bool vpd::parseField(const uint8_t fieldOffset, uint8_t& nextField)
     std::string keyword;
     std::string data;
     std::string str;
-    name = pci_vpd_lrdt_tag(rawData[fieldOffset]);
+    name = caculateLRDT(rawData[fieldOffset]);
     uint16_t len = combineByte(rawData[PCI_VPD_LEN_MSB_OFFSET + fieldOffset], 
                 rawData[PCI_VPD_LEN_LSB_OFFSET + fieldOffset]);
     if ((fieldOffset + len + PCI_VPD_HEADER_LEN) > I2C_DATA_MAX)

@@ -11,7 +11,6 @@
 #define IO_EXPANDER_COMMAND_1 0x01
 #define IO_EXPANDER_COMMAND_3 0x03
 #define I2C_VPD_SLAVE_ADDR 0x50
-#define I2C_TMP431_SLAVE_ADDR 0x4c
 
 namespace phosphor
 {
@@ -28,23 +27,16 @@ static const std::unordered_map<std::string, keywordInfo>
 
 bittwareSOC::bittwareSOC(uint8_t index, sdbusplus::bus::bus& bus, bittwareConfig config) :
     index(index), bus(bus), _event(sdeventplus::Event::get_default()),
-    _timer(_event, std::bind(&bittwareSOC::read, this)),
-    tmpSensor(config.busID), config(config),
-    bittwareIfaces(bus, std::string(BITTWARE_SOC_OBJ_PATH + std::to_string(index)).c_str())
+    _timer(_event, std::bind(&bittwareSOC::read, this)), config(config)
 {
     init();
-    valueIface::scale(TMP431_TEMPERATURE_SCALE);
-    warningInterface::warningHigh(TMP431_TEMPERATURE_WARNING_HIGH);
-    criticalInterface::criticalHigh(TMP431_TEMPERATURE_CRITICAL_HIGH);
 }
 
 void bittwareSOC::read()
 {
-    temperature tmp;
-    auto res = tmpSensor.getTemp(tmp);
-    if (res)
+    if (present)
     {
-        setSensorValueToDbus(tmp.value);
+        tmpSensor->getTemp();
     }
 }
 
@@ -93,11 +85,6 @@ void bittwareSOC::setInventoryProperties(
     }
 }
 
-void bittwareSOC::setSensorValueToDbus(const u_int64_t value)
-{
-    valueIface::value(value);
-}
-
 /** @brief Make sure smbus on 250 SoC has been enabled */
 bool bittwareSOC::smbusEnable(int busID, uint8_t addr)
 {
@@ -125,7 +112,7 @@ bool bittwareSOC::smbusEnable(int busID, uint8_t addr)
             if (res >= 0)
             {
                 auto vpdExist = bus.smbusCheckSlave(busID, I2C_VPD_SLAVE_ADDR);
-                auto sensorExist = bus.smbusCheckSlave(busID, I2C_TMP431_SLAVE_ADDR);
+                auto sensorExist = bus.smbusCheckSlave(busID, TMP431_SLAVE_ADDR);
                 enabled = (vpdExist & sensorExist);
             }
             else
@@ -154,6 +141,14 @@ void bittwareSOC::init()
     present = smbusEnable(config.busID, IO_EXPANDER_SLAVE_ADDR);
     auto vpdDev = (present) ? vpd(config.busID, I2C_VPD_SLAVE_ADDR) : vpd();
     setInventoryProperties(present, vpdDev);
+    if (present)
+    {
+        auto path = std::string(BITTWARE_SOC_OBJ_PATH + std::to_string(index));
+        tmpSensor = std::make_shared<sensor>(bus, path, config.busID);
+        tmpSensor->setSensorThreshold(config.criticalHigh, config.criticalLow,
+            config.maxValue, config.minValue,
+            config.warningHigh, config.warningLow);
+    }
 }
 }
 }
