@@ -2,6 +2,7 @@
 #include "config.h"
 
 #include <string>
+#include <array>
 #include <map>
 #include <utility>
 
@@ -25,7 +26,7 @@ class vpd
     void parse();
   private:
     bool parseField(const uint8_t fieldOffset, uint8_t& nextField);
-    unsigned char rawData[I2C_DATA_MAX];
+    std::array<unsigned char, I2C_DATA_MAX> rawData;
     uint8_t eepromAddr;
     bool idChecked;
     bool checksumVerified;
