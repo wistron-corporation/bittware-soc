@@ -113,7 +113,6 @@ bool vpd::parseField(const uint8_t fieldOffset, uint8_t& nextField)
         if (name == PCI_VPD_END_TAG)
         {
             std::cout << "Reach end of VPD." << std::endl;
-            
             if (checksumVerified != true)
             {
                 std::cerr << "Invalid VPD data, checksum incorrect." << std::endl;

@@ -49,7 +49,6 @@ void bittwareSOC::createInventory()
     std::string inventoryPath;
     std::map<sdbusplus::message::object_path, Interfaces> obj;
 
-    
     inventoryPath = "/system/chassis/motherboard/BittwareSOC" + std::to_string(index);
     obj = {{
         inventoryPath,
@@ -74,8 +73,8 @@ void bittwareSOC::setInventoryProperties(
             util::SDBusPlus::setProperty(bus, INVENTORY_BUSNAME, path,
                 std::get<1>(it->second), std::get<0>(it->second),
                 data->second.substr(0, std::get<2>(it->second)));
-        } 
-        else 
+        }
+        else
         {
             /* Keyword not found, filled with empty string */
             util::SDBusPlus::setProperty(bus, INVENTORY_BUSNAME, path,
@@ -99,7 +98,7 @@ bool bittwareSOC::smbusEnable(int busID, uint8_t addr)
     }
 
     auto exist = bus.smbusCheckSlave(busID, addr);
-    if (exist) 
+    if (exist)
     {
         uint8_t direction = bus.GetSmbusCmdByte(busID, addr, IO_EXPANDER_COMMAND_3);
         direction &= ~(IO_EXPANDER_DIR_MASK);
@@ -126,7 +125,7 @@ bool bittwareSOC::smbusEnable(int busID, uint8_t addr)
         }
     }
     else
-    {
+    {
         std::cout << "Bittware " << (int)config.index << " not present." << std::endl;
     }
 

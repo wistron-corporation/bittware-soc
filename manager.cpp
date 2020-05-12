@@ -30,7 +30,7 @@ void bittwareManager::read()
 void bittwareManager::run()
 {
     init();
-    
+
     std::function<void()> callback(std::bind(&bittwareManager::read, this));
     try
     {
