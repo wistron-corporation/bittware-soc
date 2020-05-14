@@ -1,8 +1,6 @@
+#include "config.h"
 #include "manager.hpp"
-
-#include "smbus.hpp"
 #include "nlohmann/json.hpp"
-#include "i2c-dev.h"
 
 #include <fstream>
 #include <iostream>

@@ -1,5 +1,9 @@
-#include "config.h"
 #include "bittware_soc.hpp"
+
+#include <sdbusplus/bus.hpp>
+#include <sdeventplus/clock.hpp>
+#include <sdeventplus/event.hpp>
+#include <sdeventplus/utility/timer.hpp>
 
 namespace phosphor
 {

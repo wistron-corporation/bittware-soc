@@ -1,3 +1,4 @@
+#include "smbus.hpp"
 #include "sensor.hpp"
 
 #include <iostream>

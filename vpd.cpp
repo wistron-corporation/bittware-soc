@@ -1,9 +1,8 @@
-#include "smbus.hpp"
 #include "vpd.hpp"
-
-#include "i2c-dev.h"
+#include "config.h"
 
 #include <iostream>
+#include <utility>
 
 #define PCI_VPD_ID_STRING_TAG 0x02
 #define PCI_VPD_VPD_RO_TAG 0x10

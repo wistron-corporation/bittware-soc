@@ -1,15 +1,5 @@
-#include "config.h"
-
-#include "sdbusplus.hpp"
 #include "vpd.hpp"
 #include "sensor.hpp"
-
-#include <sdbusplus/bus.hpp>
-#include <sdbusplus/server.hpp>
-#include <sdbusplus/server/object.hpp>
-#include <sdeventplus/clock.hpp>
-#include <sdeventplus/event.hpp>
-#include <sdeventplus/utility/timer.hpp>
 
 namespace phosphor
 {
@@ -57,10 +47,6 @@ class bittwareSOC
     uint8_t index;
     /** @brief sdbusplus bus client connection. */
     sdbusplus::bus::bus& bus;
-    /** @brief the Event Loop structure */
-    sdeventplus::Event _event;
-    /** @brief Read Timer */
-    sdeventplus::utility::Timer<sdeventplus::ClockId::Monotonic> _timer;
     /** @brief the temperature sensor on bittware SoC */
     std::shared_ptr<sensor> tmpSensor;
     bittwareConfig config;

@@ -1,7 +1,7 @@
+#include "config.h"
 #include "bittware_soc.hpp"
+#include "sdbusplus.hpp"
 #include "smbus.hpp"
-
-#include "i2c-dev.h"
 
 #include <iostream>
 
@@ -26,8 +26,7 @@ static const std::unordered_map<std::string, keywordInfo>
 };
 
 bittwareSOC::bittwareSOC(uint8_t index, sdbusplus::bus::bus& bus, bittwareConfig config) :
-    index(index), bus(bus), _event(sdeventplus::Event::get_default()),
-    _timer(_event, std::bind(&bittwareSOC::read, this)), config(config)
+    index(index), bus(bus), config(config)
 {
     init();
 }
@@ -116,7 +115,7 @@ bool bittwareSOC::smbusEnable(int busID, uint8_t addr)
             }
             else
             {
-                std::cerr << "Failed to set IO expander direction.\n";
+                std::cerr << "Failed to set IO expander output value.\n";
             }
         }
         else

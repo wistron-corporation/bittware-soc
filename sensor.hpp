@@ -1,6 +1,3 @@
-#include "smbus.hpp"
-#include "i2c-dev.h"
-
 #include <xyz/openbmc_project/Sensor/Value/server.hpp>
 #include <xyz/openbmc_project/Sensor/Threshold/Critical/server.hpp>
 #include <xyz/openbmc_project/Sensor/Threshold/Warning/server.hpp>
@@ -9,7 +6,7 @@
 
 typedef struct
 {
-    u_int64_t value;
+    int64_t value;
     int scale;
 } temperature;
 

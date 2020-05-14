@@ -1,10 +1,8 @@
 #include "smbus.hpp"
-#include "config.h"
 
 #include <string>
 #include <array>
 #include <map>
-#include <utility>
 
 namespace phosphor
 {
